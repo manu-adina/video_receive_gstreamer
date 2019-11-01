@@ -28,7 +28,7 @@ int create_pipeline() {
     
 
     if(!pipeline || !udp_source || !src_cap || !rtp_buffer || 
-       !depayloader || !parser || !omx_decoder || !video_converter || !sink) {
+       !depayloader || !parser || !omx_decoder || !video_converter || !video_crop || !sink) {
         g_printerr("Error creating the pipeline\n");
         return -1;
     }
@@ -75,6 +75,9 @@ int main(int argc, char **argv) {
         gst_object_unref(pipeline);
         return -1;
     }
+
+    gst_element_set_state(pipeline, GST_STATE_PLAYING);
+    g_main_loop_run(loop);
 
     ret = gst_element_set_state(pipeline, GST_STATE_PLAYING);
     if(ret == GST_STATE_CHANGE_FAILURE) {
